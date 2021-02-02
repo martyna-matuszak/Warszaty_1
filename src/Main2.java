@@ -1,89 +1,95 @@
 package src;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main2 {
 
     public static void main(String[] args){
+        System.out.println("Wybierz 6 różnych liczb od 1 do 49");
         lottoDrawing();
     }
 
-    static int[]  types(){
+    static int[]  picks(){
         Scanner scanner = new Scanner(System.in);
-        int[] types = new int[6];
+        int[] picks = new int[6];
         for(int i=0; i<6; i++){
             do {
                 try {
-                    String temp = scanner.next();
-                    int type = Integer.parseInt(temp);
-                    types[i] = type;
-                    if((type>49) || (type<1)){
-                        types[i] = -1;
-                        System.out.println("Wprowadzono liczbę spoza zakresu");
-                    }
-                    for (int j=0; j<i; j++){
-                        if (type == types[j]){
-                            types[i] = -1;
-                            System.out.println("Wprowadzono ponownie tą samą liczbę");
-                        }
-                    }
+                    String currentGuess = scanner.next();
+                    int pick = Integer.parseInt(currentGuess);
+                    picks[i] = pick;
+                    checkIfInRange(picks,pick,i);
+                    checkIfUnique(picks,pick,i,true);
+
                 } catch (NumberFormatException e){
                     System.out.println("To nie jest liczba");
-                    types[i] = -1;
+                    picks[i] = -1;
                 }
-            } while (types[i] == -1);
-        } return types;
+            } while (picks[i] == -1);
+        }
+        Arrays.sort(picks);
+        return picks;
     }
 
-    static int[]  lottoScores(){
-        Random r = new Random();
-        int[] scores = new int[6];
-        int counter = 0;
-        do {
-            int score = r.nextInt(49)+1;
-            int check = 0;
-            for (int i=0; i<counter; i++){
-                if (score == scores[i]){
-                    check++;
+    static void checkIfInRange(int[] tableOfNumbers, int newNumber, int counter){
+        if((newNumber>49) || (newNumber<1)){
+            tableOfNumbers[counter] = -1;
+            System.out.println("Wprowadzono liczbę spoza zakresu");
+        }
+    }
+
+    static void checkIfUnique(int[] tableOfNumbers, int newNumber, int counter, boolean response){
+        for (int i=0; i<counter; i++){
+            if (newNumber == tableOfNumbers[i]){
+                tableOfNumbers[counter] = -1;
+                if(response){
+                    System.out.println("Wprowadzono ponownie tą samą liczbę");
                 }
             }
-            if (check==0){
-                scores[counter] = score;
-                counter++;
-            }
-        } while (counter<6);
+        }
+    }
+
+    static int[] lottoScores(){
+        int[]scores = new int[6];
+        Random r = new Random();
+
+        for(int i=0; i<6; i++){
+            do{
+                int score = r.nextInt(49)+1;
+                scores[i] = score;
+                checkIfUnique(scores,score,i,false);
+            }while(scores[i] == -1);
+        }
+        Arrays.sort(scores);
         return scores;
     }
 
-    static int checkScore(int[] types, int[] lottoScores ){
-        int counter = 0;
-        for (int i = 0; i < types.length ; i++) {
-            for (int j = 0; j < lottoScores.length ; j++) {
-                if (types[i]==lottoScores[j]){
-                    counter++;
+    static int checkScore(int[] picks, int[] scores){
+        int hits = 0;
+        for (int pick : picks) {
+            for(int score : scores){
+                if (pick==score){
+                    hits++;
                 }
             }
-
         }
-        return counter;
+        return hits;
     }
 
+
     static void lottoDrawing(){
-        int[] userTypes = types();
-        Arrays.sort(userTypes);
-        System.out.println(Arrays.toString(userTypes));
+        int[] userPicks = picks();
+        System.out.println(Arrays.toString(userPicks));
+
         int[] lottoScores = lottoScores();
         System.out.println(Arrays.toString(lottoScores));
-        int userScore = checkScore(userTypes, lottoScores);
-        if ((2 < userScore) && (userScore < 7)){
+
+        int userScore = checkScore(userPicks, lottoScores);
+        if (userScore>2){
             System.out.println("Trafiono " + userScore);
         } else {
             System.out.println("Przegrałeś :(");
         }
     }
-
 
     }
