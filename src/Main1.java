@@ -1,10 +1,10 @@
-package src.zadanie1;
+package src;
 
 import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
-public class main1 {
+public class Main1 {
 
     public static void main(String[] args){
         guessingGame();

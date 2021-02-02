@@ -1,4 +1,4 @@
-package src.zadanie5;
+package src;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-public class main5 {
+public class Main5 {
 
     public static void main(String[] args) throws IOException {
 
