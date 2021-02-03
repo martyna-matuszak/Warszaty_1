@@ -24,7 +24,6 @@ public class Main5 {
         File file = new File(filename);
 
         Connection connect = Jsoup.connect("http://www.onet.pl/");
-        //miałam wywołać zapytanie dla wybranych serwisów internetowych i próbowałam znaleźć jakiś inny niż onet, który tu działa ale mi sie nie udało
         fillFile(connect,filename);
 
         String filename2 = "filtered_popular_words.txt";
@@ -49,8 +48,7 @@ public class Main5 {
                 String headline = elem.text();
                 String[] tokens = headline.split(" ");
                 for (String token : tokens){
-                    token = token.replaceAll("\\.|,|-|\"|;|:|\\?|!|\\||'|[0-9]+","");
-                    //jak chciałam, żeby usunął wszystko co nie jest literą to skasował mi polskie znaki, więc poradziłam sobie tak pokracznie :)
+                    token = token.replaceAll("[^a-żA-Ż]","");
                     if(token.length()>0){
                         printWriter.println(token);
                     }
@@ -66,14 +64,15 @@ public class Main5 {
 
         Scanner scanner = new Scanner(file);
         PrintWriter printWriter = new PrintWriter(filename);
-        String[] restrictedWords = {"oraz", "ponieważ", "dla", "ale", "nie", "się", "jak"};
+        String[] restrictedWords = {"oraz", "ponieważ", "dla", "ale", "nie", "się", "jak", "tak", "czy", "nim", "niż"};
 
         while (scanner.hasNext()){
             String word = scanner.nextLine();
             boolean isItRestricted = false;
-            for (int i = 0; i < restrictedWords.length ; i++) {
-                if(word.equalsIgnoreCase(restrictedWords[i])){
+            for (String restrictedWord : restrictedWords) {
+                if (word.equalsIgnoreCase(restrictedWord)) {
                     isItRestricted = true;
+                    break;
                 }
             }
             if (word.length()>=3 && !isItRestricted){
