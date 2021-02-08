@@ -1,4 +1,4 @@
-# Warsztaty 1 - Java
+# Warsztaty - Java Podstawy
 
 ## Main1 - Gra w zgadywanie liczb
 
