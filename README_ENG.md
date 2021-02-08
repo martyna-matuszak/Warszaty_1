@@ -1,4 +1,4 @@
-# Workshop 1 - Java
+# Workshop - Java Basics
 
 ## Main1 - Number Guessing Game
 
